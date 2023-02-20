@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+#cmakethings
+cmake-build-debug*
+.idea
+out
+data
+depends
