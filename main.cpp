@@ -1,20 +1,18 @@
-﻿#include <iostream>
-#include <glad/gl.h>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtx/transform2.hpp>
-#include<glm/gtx/euler_angles.hpp>
+﻿#define GLFW_INCLUDE_NONE
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "VertexData.h"
-#include "ShaderSource.h"
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform2.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
-using namespace std;
+#include "texture2d.h"
+#include "renderer/mesh_filter.h"
+#include "renderer/shader.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -22,24 +20,28 @@ static void error_callback(int error, const char* description)
 }
 
 GLFWwindow* window;
-GLuint vertex_shader, fragment_shader, program;
-GLint mvp_location, vpos_location, vcol_location;
+GLint mvp_location, vpos_location, vcol_location,u_diffuse_texture_location,a_uv_location;
+GLuint kVBO,kEBO;
+GLuint kVAO;
+Texture2D* texture2d= nullptr;
+MeshFilter* mesh_filter= nullptr;
+
 
 //初始化OpenGL
 void init_opengl()
 {
-    cout<<"init opengl"<<endl;
-
-    //设置错误回调
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit())
         exit(EXIT_FAILURE);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
-    //创建窗口
     window = glfwCreateWindow(960, 640, "Simple example", NULL, NULL);
     if (!window)
     {
@@ -50,74 +52,77 @@ void init_opengl()
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
-
-
 }
 
-//编译、链接Shader
-void compile_shader()
+
+//创建Texture
+void CreateTexture(std::string image_file_path)
 {
-    //创建顶点Shader
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    //指定Shader源码
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    //编译Shader
-    glCompileShader(vertex_shader);
-    //获取编译结果
-    GLint compile_status=GL_FALSE;
-    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &compile_status);
-    if (compile_status == GL_FALSE)
-    {
-        GLchar message[256];
-        glGetShaderInfoLog(vertex_shader, sizeof(message), 0, message);
-        cout<<"compile vs error:"<<message<<endl;
-    }
+    texture2d=Texture2D::LoadFromFile(image_file_path);
+}
 
-    //创建片段Shader
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    //指定Shader源码
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    //编译Shader
-    glCompileShader(fragment_shader);
-    //获取编译结果
-    compile_status=GL_FALSE;
-    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &compile_status);
-    if (compile_status == GL_FALSE)
-    {
-        GLchar message[256];
-        glGetShaderInfoLog(fragment_shader, sizeof(message), 0, message);
-        cout<<"compile fs error:"<<message<<endl;
-    }
+/// 创建VAO
+void GeneratorVertexArrayObject(){
+    glGenVertexArrays(1,&kVAO);
+}
 
+/// 创建VBO和EBO，设置VAO
+void GeneratorBufferObject()
+{
+    //在GPU上创建缓冲区对象
+    glGenBuffers(1,&kVBO);
+    //将缓冲区对象指定为顶点缓冲区对象
+    glBindBuffer(GL_ARRAY_BUFFER, kVBO);
+    //上传顶点数据到缓冲区对象
+    glBufferData(GL_ARRAY_BUFFER, mesh_filter->mesh()->vertex_num_ * sizeof(MeshFilter::Vertex), mesh_filter->mesh()->vertex_data_, GL_STATIC_DRAW);
 
-    //创建GPU程序
-    program = glCreateProgram();
-    //附加Shader
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    //Link
-    glLinkProgram(program);
-    //获取编译结果
-    GLint link_status=GL_FALSE;
-    glGetProgramiv(program, GL_LINK_STATUS, &link_status);
-    if (link_status == GL_FALSE)
+    //在GPU上创建缓冲区对象
+    glGenBuffers(1,&kEBO);
+    //将缓冲区对象指定为顶点索引缓冲区对象
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, kEBO);
+    //上传顶点索引数据到缓冲区对象
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_filter->mesh()->vertex_index_num_ * sizeof(unsigned short), mesh_filter->mesh()->vertex_index_data_, GL_STATIC_DRAW);
+
+    //设置VAO
+    glBindVertexArray(kVAO);
     {
-        GLchar message[256];
-        glGetProgramInfoLog(program, sizeof(message), 0, message);
-        cout<<"link error:"<<message<<endl;
+        //指定当前使用的VBO
+        glBindBuffer(GL_ARRAY_BUFFER, kVBO);
+        //将Shader变量(a_pos)和顶点坐标VBO句柄进行关联，最后的0表示数据偏移量。
+        glVertexAttribPointer(vpos_location, 3, GL_FLOAT, false, sizeof(MeshFilter::Vertex), 0);
+        //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联
+        glVertexAttribPointer(vcol_location, 4, GL_FLOAT, false, sizeof(MeshFilter::Vertex), (void*)(sizeof(float)*3));
+        //将Shader变量(a_uv)和顶点UV坐标VBO句柄进行关联，最后的0表示数据偏移量。
+        glVertexAttribPointer(a_uv_location, 2, GL_FLOAT, false, sizeof(MeshFilter::Vertex), (void*)(sizeof(float)*(3+4)));
+
+        glEnableVertexAttribArray(vpos_location);
+        glEnableVertexAttribArray(vcol_location);
+        glEnableVertexAttribArray(a_uv_location);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, kEBO);
     }
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 int main(void)
 {
     init_opengl();
 
-    compile_shader();
+    mesh_filter=new MeshFilter();
+    mesh_filter->LoadMesh("../data/model/cube.mesh");
 
-    //获取shader属性ID
-    mvp_location = glGetUniformLocation(program, "u_mvp");
-    vpos_location = glGetAttribLocation(program, "a_pos");
-    vcol_location = glGetAttribLocation(program, "a_color");
+    CreateTexture("../data/images/urban.cpt");
+
+    Shader* shader=Shader::Find("../data/shader/unlit");
+
+    mvp_location = glGetUniformLocation(shader->gl_program_id(), "u_mvp");
+    vpos_location = glGetAttribLocation(shader->gl_program_id(), "a_pos");
+    vcol_location = glGetAttribLocation(shader->gl_program_id(), "a_color");
+    a_uv_location = glGetAttribLocation(shader->gl_program_id(), "a_uv");
+    u_diffuse_texture_location= glGetUniformLocation(shader->gl_program_id(), "u_diffuse_texture");
+
+    GeneratorVertexArrayObject();
+    GeneratorBufferObject();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -125,20 +130,19 @@ int main(void)
         int width, height;
         glm::mat4 model,view, projection, mvp;
 
-        //获取画面宽高
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float) height;
 
         glViewport(0, 0, width, height);
-
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         glClearColor(49.f/255,77.f/255,121.f/255,1.f);
 
-        //坐标系变换
         glm::mat4 trans = glm::translate(glm::vec3(0,0,0)); //不移动顶点坐标;
+
         static float rotate_eulerAngle=0.f;
         rotate_eulerAngle+=1;
         glm::mat4 rotation = glm::eulerAngleYXZ(glm::radians(rotate_eulerAngle), glm::radians(rotate_eulerAngle), glm::radians(rotate_eulerAngle)); //使用欧拉角旋转;
+
         glm::mat4 scale = glm::scale(glm::vec3(2.0f, 2.0f, 2.0f)); //缩放;
         model = trans*scale*rotation;
 
@@ -149,22 +153,28 @@ int main(void)
         mvp=projection*view*model;
 
         //指定GPU程序(就是指定顶点着色器、片段着色器)
-        glUseProgram(program);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);//开启背面剔除
+        glUseProgram(shader->gl_program_id());
+        {
+            glEnable(GL_DEPTH_TEST);
+            glEnable(GL_CULL_FACE);//开启背面剔除
+            //上传mvp矩阵
+            glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
-        //启用顶点Shader属性(a_pos)，指定与顶点坐标数据进行关联
-        glEnableVertexAttribArray(vpos_location);
-        glVertexAttribPointer(vpos_location, 3, GL_FLOAT, false, sizeof(glm::vec3), kPositions);
+            //贴图设置
+            //激活纹理单元0
+            glActiveTexture(GL_TEXTURE0);
+            //将加载的图片纹理句柄，绑定到纹理单元0的Texture2D上。
+            glBindTexture(GL_TEXTURE_2D,texture2d->gl_texture_id_);
+            //设置Shader程序从纹理单元0读取颜色数据
+            glUniform1i(u_diffuse_texture_location,0);
 
-        //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联
-        glEnableVertexAttribArray(vcol_location);
-        glVertexAttribPointer(vcol_location, 3, GL_FLOAT, false, sizeof(glm::vec4), kColors);
+            glBindVertexArray(kVAO);
+            {
+                glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_SHORT,0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
+            }
+            glBindVertexArray(0);
+        }
 
-        //上传mvp矩阵
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
-        //上传顶点数据并进行绘制
-        glDrawArrays(GL_TRIANGLES, 0, 6*6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

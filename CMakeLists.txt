@@ -10,4 +10,5 @@ endif ()
 include(CMakeLists.txt.glfw)
 include_directories("depends")
 #源代码文件
-add_executable(untitled main.cpp ${glfw_sources} ShaderSource.h VertexData.h)
+
+add_executable(untitled main.cpp ${glfw_sources} texture2d.cpp renderer/mesh_filter.cpp renderer/shader.cpp renderer/mesh_filter.cpp)
