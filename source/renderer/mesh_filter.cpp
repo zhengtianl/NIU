@@ -1,21 +1,31 @@
+﻿//
+// Created by captain on 2021/4/25.
 //
-// Created by 45807 on 2023/2/21.
-//
+
 
 #include "mesh_filter.h"
 #include <fstream>
+#include <rttr/registration>
+#include "../utils/application.h"
 
 using std::ifstream;
 using std::ios;
 
+using namespace rttr;
+RTTR_REGISTRATION
+{
+    registration::class_<MeshFilter>("MeshFilter")
+            .constructor<>()(rttr::policy::ctor::as_raw_ptr);
+}
+
 MeshFilter::MeshFilter()
-        :mesh_(nullptr) {
+    :mesh_(nullptr) {
 
 }
 
 void MeshFilter::LoadMesh(string mesh_file_path) {
     //读取 Mesh文件头
-    ifstream input_file_stream(mesh_file_path,ios::in | ios::binary);
+    ifstream input_file_stream(Application::data_path()+mesh_file_path,ios::in | ios::binary);
     MeshFileHead mesh_file_head;
     input_file_stream.read((char*)&mesh_file_head,sizeof(mesh_file_head));
     //读取顶点数据

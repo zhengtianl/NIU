@@ -1,5 +1,5 @@
-//
-// Created by 45807 on 2023/2/21.
+﻿//
+// Created by captain on 2021/4/25.
 //
 
 #ifndef UNTITLED_MESH_FILTER_H
@@ -7,11 +7,12 @@
 
 #include <string>
 #include <glm/glm.hpp>
+#include "component/component.h"
 
 using std::string;
 
 
-class MeshFilter {
+class MeshFilter:public Component{
 public:
     MeshFilter();
     ~MeshFilter();

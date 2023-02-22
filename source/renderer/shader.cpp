@@ -1,11 +1,12 @@
-//
-// Created by 45807 on 2023/2/21.
+﻿//
+// Created by captain on 2021/4/25.
 //
 
 #include "shader.h"
 #include <iostream>
 #include <fstream>
 #include <glad/gl.h>
+#include "../utils/application.h"
 
 using std::ifstream;
 using std::ios;
@@ -42,8 +43,8 @@ void Shader::Parse(string shader_name) {
     shader_name_=shader_name;
 
     //组装完整文件路径
-    string vertex_shader_file_path=shader_name+".vs";
-    string fragment_shader_file_path=shader_name+".fs";
+    string vertex_shader_file_path=Application::data_path()+shader_name+".vs";
+    string fragment_shader_file_path=Application::data_path()+shader_name+".fs";
 
     //读取顶点Shader代码
     ifstream vertex_shader_input_file_stream(vertex_shader_file_path);
@@ -105,3 +106,12 @@ void Shader::CreateGPUProgram(const char* vertex_shader_text, const char* fragme
         cout<<"link error:"<<message<<endl;
     }
 }
+
+void Shader::Active() {
+    glUseProgram(gl_program_id_);
+}
+
+void Shader::InActive() {
+    
+}
+

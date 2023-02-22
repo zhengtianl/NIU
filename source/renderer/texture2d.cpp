@@ -1,7 +1,10 @@
-﻿
+﻿//
+// Created by captain on 2021/4/6.
+//
 #include "texture2d.h"
 #include <fstream>
 #include "timetool/stopwatch.h"
+#include "../utils/application.h"
 
 using std::ifstream;
 using std::ios;
@@ -14,7 +17,7 @@ Texture2D* Texture2D::LoadFromFile(std::string& image_file_path)
     StopWatch stopwatch;
     stopwatch.start();
     //读取 cpt 压缩纹理文件
-    ifstream input_file_stream(image_file_path,ios::in | ios::binary);
+    ifstream input_file_stream(Application::data_path()+ image_file_path,ios::in | ios::binary);
     CptFileHead cpt_file_head;
     input_file_stream.read((char*)&cpt_file_head, sizeof(CptFileHead));
 

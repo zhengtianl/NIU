@@ -1,5 +1,5 @@
-//
-// Created by 45807 on 2023/2/21.
+﻿//
+// Created by captain on 2021/4/25.
 //
 
 #ifndef UNTITLED_SHADER_H
@@ -19,6 +19,9 @@ public:
 public:
     void Parse(string shader_name);//加载Shader文件并解析
     void CreateGPUProgram(const char* vertex_shader_text, const char* fragment_shader_text);//编译Shader,创建GPU程序;
+
+    void Active();//激活
+    void InActive();//禁用
 
     unsigned int gl_program_id(){return gl_program_id_;}//glCreateProgram()返回的GPU程序句柄;
 
