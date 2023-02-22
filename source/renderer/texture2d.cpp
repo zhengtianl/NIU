@@ -1,6 +1,4 @@
-﻿//
-// Created by captain on 2021/4/6.
-//
+﻿
 #include "texture2d.h"
 #include <fstream>
 #include "timetool/stopwatch.h"

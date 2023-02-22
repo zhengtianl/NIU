@@ -1,6 +1,4 @@
-﻿//
-// Created by captainchen on 2021/5/14.
-//
+﻿
 
 #ifndef UNTITLED_APPLICATION_H
 #define UNTITLED_APPLICATION_H

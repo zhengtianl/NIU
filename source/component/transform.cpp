@@ -1,7 +1,4 @@
-﻿//
-// Created by captain on 2021/6/9.
-//
-
+﻿
 #include "transform.h"
 #include <rttr/registration>
 

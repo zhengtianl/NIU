@@ -1,6 +1,4 @@
-﻿//
-// Created by captain on 2021/6/9.
-//
+﻿
 
 #ifndef UNTITLED_TRANSFORM_H
 #define UNTITLED_TRANSFORM_H

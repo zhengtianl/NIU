@@ -1,6 +1,4 @@
-﻿//
-// Created by captain on 2021/6/9.
-//
+﻿
 
 #include "game_object.h"
 #include <rttr/registration>

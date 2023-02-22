@@ -1,6 +1,4 @@
-﻿//
-// Created by captain on 2021/4/25.
-//
+﻿
 
 
 #include "mesh_filter.h"

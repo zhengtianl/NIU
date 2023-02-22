@@ -1,7 +1,4 @@
-﻿//
-// Created by captain on 2021/5/3.
-//
-
+﻿
 #include "material.h"
 #include <iostream>
 #include <fstream>

@@ -1,7 +1,4 @@
-﻿//
-// Created by captainchen on 2021/5/11.
-//
-
+﻿
 #include "mesh_renderer.h"
 #include <glad/gl.h>
 #include <rttr/registration>
