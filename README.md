@@ -1,4 +1,5 @@
 # NIU-Game-Engine
+![version](https://img.shields.io/badge/version-0.2-green.svg?maxAge=2592000) 
 ## Preparation for the desgin
 ***
 #### Date: 1/15/2023 - 2/1/2023
@@ -26,5 +27,4 @@
 5. [x] [texture](https://github.com/zhengtianl/NIU/blob/d85946b7a35cf46c8a5af719b957b40ae24358fa/source/renderer/texture2d.cpp)
 
 #### Date: 2/21/2023 - 2/23/2023
-![version](https://img.shields.io/badge/version-0.2-green.svg?maxAge=2592000) ![mosquitto](https://img.shields.io/badge/mosquitto-1.5+-blue.svg?maxAge=2592000)
 1. [x] [Input Logic](https://github.com/zhengtianl/NIU/blob/d85946b7a35cf46c8a5af719b957b40ae24358fa/source/control)
