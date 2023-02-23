@@ -1,6 +1,4 @@
-﻿
-
-#ifndef UNTITLED_GAME_OBJECT_H
+﻿#ifndef UNTITLED_GAME_OBJECT_H
 #define UNTITLED_GAME_OBJECT_H
 
 #include <iostream>
@@ -8,13 +6,10 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
-#include <rttr/registration>
-using namespace rttr;
 
 class Component;
 class GameObject {
 public:
-    GameObject();
     GameObject(std::string name);
     ~GameObject();
 
@@ -26,22 +21,6 @@ public:
     /// \return
     Component* AddComponent(std::string component_type_name);
 
-    template <class T>
-    T* AddComponent(){
-        T* component=new T();
-        type t=type::get(*component);
-        std::string component_type_name=t.get_name().to_string();
-        component->set_game_object(this);
-        if(component_type_instance_map_.find(component_type_name)==component_type_instance_map_.end()){
-            std::vector<Component*> component_vec;
-            component_vec.push_back(component);
-            component_type_instance_map_[component_type_name]=component_vec;
-        }else{
-            component_type_instance_map_[component_type_name].push_back(component);
-        }
-        return component;
-    }
-
     /// 获取组件
     /// \param component_type_name 组件类名
     /// \return
@@ -52,9 +31,14 @@ public:
     /// \return
     std::vector<Component*>& GetComponents(std::string component_type_name);
 
+    unsigned char layer(){return layer_;}
+    void set_layer(unsigned char layer){layer_=layer;}
+
 private:
     std::string name_;
     std::unordered_map<std::string,std::vector<Component*>> component_type_instance_map_;
+
+    unsigned char layer_;//将物体分不同的层，用于相机分层、物理碰撞分层等。
 };
 
 

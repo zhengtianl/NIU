@@ -1,16 +1,11 @@
 ﻿
-
 #include "game_object.h"
 #include <rttr/registration>
 #include "component.h"
 
 using namespace rttr;
 
-GameObject::GameObject() {
-
-}
-
-GameObject::GameObject(std::string name) {
+GameObject::GameObject(std::string name):layer_(0x01) {
     set_name(name);
 }
 
@@ -34,7 +29,6 @@ Component* GameObject::AddComponent(std::string component_type_name) {
     return component;
 }
 
-
 std::vector<Component*> &GameObject::GetComponents(std::string component_type_name) {
     return component_type_instance_map_[component_type_name];
 }
@@ -48,3 +42,4 @@ Component* GameObject::GetComponent(std::string component_type_name) {
     }
     return component_type_instance_map_[component_type_name][0];
 }
+

@@ -1,4 +1,7 @@
-﻿
+﻿//
+// Created by a458078290 on 2021/5/11.
+//
+
 #include "mesh_renderer.h"
 #include <glad/gl.h>
 #include <rttr/registration>
@@ -9,14 +12,15 @@
 #include "mesh_filter.h"
 #include "texture2d.h"
 #include "shader.h"
+#include "camera.h"
 #include "component/game_object.h"
 #include "component/transform.h"
 
 using namespace rttr;
 RTTR_REGISTRATION
 {
-registration::class_<MeshRenderer>("MeshRenderer")
-.constructor<>()(rttr::policy::ctor::as_raw_ptr);
+    registration::class_<MeshRenderer>("MeshRenderer")
+            .constructor<>()(rttr::policy::ctor::as_raw_ptr);
 }
 
 MeshRenderer::MeshRenderer() {
@@ -31,23 +35,38 @@ void MeshRenderer::SetMaterial(Material* material) {
     material_=material;
 }
 
+
 void MeshRenderer::Render() {
+    //从当前Camera获取View Projection
+    auto current_camera=Camera::current_camera();
+    if (current_camera== nullptr){
+        return;
+    }
+    //判断相机的 culling_mask 是否包含当前物体 layer
+    if ((current_camera->culling_mask() & game_object()->layer()) == 0x00){
+        return;
+    }
+
+    glm::mat4 view=current_camera->view_mat4();
+    glm::mat4 projection=current_camera->projection_mat4();
+
     //主动获取 Transform 组件，计算mvp。
     auto component_transform=game_object()->GetComponent("Transform");
     auto transform=dynamic_cast<Transform*>(component_transform);
     if(!transform){
         return;
     }
+
     glm::mat4 trans = glm::translate(transform->position());
     auto rotation=transform->rotation();
     glm::mat4 eulerAngleYXZ = glm::eulerAngleYXZ(glm::radians(rotation.y), glm::radians(rotation.x), glm::radians(rotation.z));
     glm::mat4 scale = glm::scale(transform->scale()); //缩放;
     glm::mat4 model = trans*scale*eulerAngleYXZ;
-    glm::mat4 mvp=projection_*view_*model;
+    glm::mat4 mvp=projection*view * model;
 
     //主动获取 MeshFilter 组件
-    auto component_mesh_filter=game_object()->GetComponent("MeshFilter");
-    auto mesh_filter=dynamic_cast<MeshFilter*>(component_mesh_filter);
+    auto component_meshfilter=game_object()->GetComponent("MeshFilter");
+    auto mesh_filter=dynamic_cast<MeshFilter*>(component_meshfilter);
     if(!mesh_filter){
         return;
     }
@@ -123,4 +142,3 @@ void MeshRenderer::Render() {
         glBindVertexArray(0);
     }
 }
-
