@@ -2,7 +2,7 @@
 NIUGameEngine
 
 ## Preparation for the desgin
-****
+***
 #### Date: 1/15/2023 - 2/1/2023
 
 ##### Do some research about the GameEngine
@@ -10,19 +10,16 @@ NIUGameEngine
 2. [x] [Pipeline of the Graphic](https://www.bilibili.com/video/BV1oU4y1R7Km/?spm_id_from=333.337.search-card.all.click)
 3. [x] [Choose the meture Engine to learn](https://unity.com/)
 </br>
-</br>
 <font color= pink size=4 face="宋体" bold = True> Some Recommanded free Chinese book and course </font>
-</br>[GAMES101](https://www.bilibili.com/video/BV1X7411F744/?spm_id_from=333.337.search-card.all.click&vd_source=307b08d5eb71063d08b1fa59676c0d70)
-</br>[GAMES104](https://www.bilibili.com/video/BV1oU4y1R7Km/?spm_id_from=333.337.search-card.all.click&vd_source=307b08d5eb71063d08b1fa59676c0d70)
-</br>[GAMES105](https://www.bilibili.com/video/BV1GG4y1p7fF/?spm_id_from=333.999.0.0&vd_source=307b08d5eb71063d08b1fa59676c0d70)
-</br>[GAMES206](https://www.bilibili.com/video/BV1gV4y1w7Dt/?spm_id_from=333.999.0.0&vd_source=307b08d5eb71063d08b1fa59676c0d70)
-</br>
-[游戏引擎 浅入浅出](https://github.com/ThisisGame/cpp-game-engine-book)
-</br>
-[Unity Document](https://docs.unity3d.com/cn/2020.2/Manual/index.html)
-
+</br> <font color= black size=2 face="宋体" bold = True>You can find each of them on bilibili for free </font>
+</br>[GAMES101]
+</br>[GAMES104]
+</br>[GAMES105]
+</br>[GAMES206]
+</br>[游戏引擎 浅入浅出]
+</br>[Unity Document]
 ## Create the Engine
-****
+***
 #### Date: 2/1/2023 - 2/20/2023
 ##### Finish the render modules
 1. [x] [Camera](https://github.com/zhengtianl/NIU/blob/d85946b7a35cf46c8a5af719b957b40ae24358fa/source/renderer/camera.cpp)
