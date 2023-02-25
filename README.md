@@ -1,4 +1,5 @@
 # NIU-Game-Engine
+![version](https://img.shields.io/badge/version-0.2-green.svg?maxAge=2592000) 
 ## Preparation for the desgin
 ***
 #### Date: 1/15/2023 - 2/1/2023
