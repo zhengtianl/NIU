@@ -11,6 +11,7 @@ include_directories("depends")
 include_directories("source")
 
 file(GLOB_RECURSE rttr_cpp "depends/rttr/*.cpp")
-file(GLOB_RECURSE source_src "source/*.cpp")
+file(GLOB_RECURSE engine_cpp source/*.cpp)
+file(GLOB_RECURSE example_cpp example/*.cpp)
 
-add_executable(untitled ${glfw_sources} ${rttr_cpp} ${source_src})
+add_executable(untitled ${glfw_sources} ${rttr_cpp} ${engine_cpp} ${example_cpp})
