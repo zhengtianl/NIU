@@ -28,3 +28,6 @@
 
 #### Date: 2/21/2023 - 2/23/2023
 1. [x] [Input Logic](https://github.com/zhengtianl/NIU/blob/d85946b7a35cf46c8a5af719b957b40ae24358fa/source/control)
+
+#### Date: 2/21/2023 - 2/25/2023
+1. [x] [Create the test and change the structure of the engine](https://github.com/zhengtianl/NIU/blob/c654d47df9ffc7d8f6d1778347c43c040aed6110/example)
