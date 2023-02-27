@@ -1,7 +1,4 @@
-﻿//
-// Created by captain on 2021/5/3.
-//
-
+﻿
 #ifndef UNTITLED_MATERIAL_H
 #define UNTITLED_MATERIAL_H
 
@@ -22,6 +19,11 @@ public:
 
     void SetUniformMatrix4fv(std::string shader_property_name,float* pointer);
     void SetUniform1i(std::string shader_property_name,int value);
+
+    /// 设置纹理
+    /// \param property
+    /// \param texture2D
+    void SetTexture(std::string property, Texture2D* texture2D);
 
     Shader* shader(){return shader_;}
 

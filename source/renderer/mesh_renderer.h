@@ -1,5 +1,4 @@
 ﻿
-
 #ifndef UNTITLED_MESH_RENDERER_H
 #define UNTITLED_MESH_RENDERER_H
 
@@ -18,15 +17,9 @@ public:
     void SetMaterial(Material* material);//设置Material
     Material* material(){return material_;}
 
-    void SetView(glm::mat4 view){view_=view;};
-    void SetProjection(glm::mat4 projection){projection_=projection;};
-
     void Render();//渲染
 private:
     Material* material_;
-
-    glm::mat4 view_;
-    glm::mat4 projection_;
 
     unsigned int vertex_buffer_object_=0;//顶点缓冲区对象
     unsigned int element_buffer_object_=0;//索引缓冲区对象

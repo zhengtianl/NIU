@@ -1,7 +1,4 @@
-//
-// Created by a458078290
-//
-
+﻿
 #include "camera.h"
 #include <memory>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,7 +18,7 @@ RTTR_REGISTRATION//注册反射
 std::vector<Camera*> Camera::all_camera_;
 Camera* Camera::current_camera_;
 
-Camera::Camera():clear_color_(49.f/255,77.f/255,121.f/255,1.f),clear_flag_(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT),depth_(0) {
+Camera::Camera():clear_color_(49.f/255,77.f/255,121.f/255,1.f),clear_flag_(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT),depth_(0),culling_mask_(0x01) {
     //默认获取现有Camera最大depth，设置当前Camera.depth +1
     if (all_camera_.size()>0){
         unsigned char max_depth=all_camera_.back()->depth();
@@ -73,6 +70,12 @@ void Camera::Foreach(std::function<void()> func) {
         func();
     }
 }
+
+
+
+
+
+
 
 
 

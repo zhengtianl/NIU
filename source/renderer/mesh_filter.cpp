@@ -1,6 +1,4 @@
 ﻿
-
-
 #include "mesh_filter.h"
 #include <fstream>
 #include <rttr/registration>
@@ -47,3 +45,18 @@ MeshFilter::~MeshFilter() {
     delete(mesh_);
     mesh_= nullptr;
 }
+
+void MeshFilter::CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data) {
+    mesh_=new Mesh();
+    mesh_->vertex_num_=vertex_data.size();
+    mesh_->vertex_index_num_=vertex_index_data.size();
+
+    unsigned short vertex_data_size= mesh_->vertex_num_ * sizeof(Vertex);
+    mesh_->vertex_data_= static_cast<Vertex *>(malloc(vertex_data_size));
+    memcpy(mesh_->vertex_data_, &vertex_data[0], vertex_data_size);
+
+    unsigned short vertex_index_data_size=mesh_->vertex_num_ * sizeof(Vertex);
+    mesh_->vertex_index_data_= static_cast<unsigned short *>(malloc(vertex_index_data_size));
+    memcpy(mesh_->vertex_index_data_,&vertex_index_data[0],vertex_index_data_size);
+}
+

@@ -56,7 +56,7 @@ void Material::Parse(string material_path) {
 
         std::string shader_property_name=texture_name_attribute->value();
         std::string image_path=texture_image_attribute->value();
-        textures_.push_back(std::make_pair(texture_name_attribute->value(), Texture2D::LoadFromFile(image_path)));
+        textures_.push_back(std::make_pair(texture_name_attribute->value(), image_path.empty()? nullptr:Texture2D::LoadFromFile(image_path)));
 
         material_texture_node=material_texture_node->next_sibling("texture");
     }
@@ -70,6 +70,16 @@ void Material::SetUniformMatrix4fv(std::string shader_property_name, float *poin
 
 void Material::SetUniform1i(std::string shader_property_name, int value) {
     uniform_1i_vec.push_back(std::make_pair(shader_property_name,value));
+}
+
+void Material::SetTexture(string property, Texture2D *texture2D) {
+    for (auto& pair : textures_){
+        if(pair.first==property){
+            delete(pair.second);
+            pair.second=texture2D;
+            break;
+        }
+    }
 }
 
 

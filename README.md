@@ -31,3 +31,8 @@
 
 #### Date: 2/21/2023 - 2/25/2023
 1. [x] [Create the test and change the structure of the engine](https://github.com/zhengtianl/NIU/blob/c654d47df9ffc7d8f6d1778347c43c040aed6110/example)
+
+#### Date: 2/25/2023 - 2/27/2023
+1. [x] import the font depencies
+2. [x] render the font on the screen (picture showed on the below)
+   ![picture](Image/1677485399234.png)

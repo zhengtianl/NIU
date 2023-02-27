@@ -1,7 +1,4 @@
-//
-// Created by 45807 on 2023/2/23.
-//
-
+﻿
 #ifndef UNTITLED_CAMERA_H
 #define UNTITLED_CAMERA_H
 
@@ -82,4 +79,3 @@ private:
 
 
 #endif //UNTITLED_CAMERA_H
-

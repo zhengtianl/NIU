@@ -9,6 +9,7 @@ using namespace std;
 
 class Transform;
 class Camera;
+class Material;
 class LoginScene:public Component{
 public:
     LoginScene();
@@ -18,7 +19,15 @@ public:
     void Update();
 
 private:
+    /// 创建鱼缸
+    void CreateFishSoupPot();
+
+    /// 创建文字
+    void CreateFont();
+private:
     Transform* transform_fishsoup_pot_;
+//    Material* material;
+
     Transform* transform_camera_1_;
     Camera*     camera_1_;
     Transform* transform_camera_2_;

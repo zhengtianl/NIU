@@ -1,7 +1,4 @@
-//
-// Created by 45807 on 2023/2/23.
-//
-
+﻿
 #include "input.h"
 #include <iostream>
 #include "key_code.h"
@@ -55,4 +52,3 @@ void Input::Update() {
 
     mouse_scroll_ = 0;
 }
-

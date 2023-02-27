@@ -1,7 +1,4 @@
-﻿//
-// Created by a458078290 on 2021/5/11.
-//
-
+﻿
 #include "mesh_renderer.h"
 #include <glad/gl.h>
 #include <rttr/registration>
@@ -120,6 +117,9 @@ void MeshRenderer::Render() {
     {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);//开启背面剔除
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         //上传mvp矩阵
         glUniformMatrix4fv(glGetUniformLocation(gl_program_id, "u_mvp"), 1, GL_FALSE, &mvp[0][0]);
 
@@ -142,3 +142,4 @@ void MeshRenderer::Render() {
         glBindVertexArray(0);
     }
 }
+

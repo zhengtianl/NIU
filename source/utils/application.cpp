@@ -1,11 +1,27 @@
-﻿
+﻿//
+// Created by Stark on 2023/2/27.
+//
+
 #include "application.h"
 #include <memory>
+#include <glad/gl.h>
+#ifdef WIN32
+// 避免出现APIENTRY重定义警告。
+// freetype引用了windows.h，里面定义了APIENTRY。
+// glfw3.h会判断是否APIENTRY已经定义然后再定义一次。
+// 但是从编译顺序来看glfw3.h在freetype之前被引用了，判断不到 Windows.h中的定义，所以会出现重定义。
+// 所以在 glfw3.h之前必须引用  Windows.h。
+#include <Windows.h>
+#endif
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+#include "debug.h"
 #include "component/game_object.h"
 #include "renderer/camera.h"
 #include "renderer/mesh_renderer.h"
 #include "control/input.h"
 #include "screen.h"
+
 
 std::string Application::data_path_;
 GLFWwindow* Application::glfw_window_;
@@ -54,10 +70,15 @@ static void mouse_scroll_callback(GLFWwindow* window, double x, double y)
 //    std::cout<<"mouse_scroll_callback:"<<x<<","<<y<<std::endl;
 }
 
-void Application::InitOpengl() {
+void Application::Init() {
+    Debug::Init();
+    DEBUG_LOG_INFO("game start");
     glfwSetErrorCallback(error_callback);
     if (!glfwInit())
+    {
+        DEBUG_LOG_ERROR("glfw init failed!");
         exit(EXIT_FAILURE);
+    }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -69,6 +90,7 @@ void Application::InitOpengl() {
     glfw_window_ = glfwCreateWindow(960, 640, "Simple example", NULL, NULL);
     if (!glfw_window_)
     {
+        DEBUG_LOG_ERROR("glfwCreateWindow error!");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }

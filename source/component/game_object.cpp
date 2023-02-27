@@ -52,8 +52,8 @@ Component* GameObject::GetComponent(std::string component_type_name) {
 }
 
 void GameObject::ForeachComponent(std::function<void(Component *)> func) {
-    for (auto v : component_type_instance_map_){
-        for (auto iter : v.second){
+    for (auto& v : component_type_instance_map_){
+        for (auto& iter : v.second){
             Component* component=iter;
             func(component);
         }

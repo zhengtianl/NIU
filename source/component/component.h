@@ -1,4 +1,5 @@
-﻿#ifndef UNTITLED_COMPONENT_H
+﻿
+#ifndef UNTITLED_COMPONENT_H
 #define UNTITLED_COMPONENT_H
 
 class GameObject;
