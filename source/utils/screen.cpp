@@ -1,4 +1,3 @@
-﻿
 #include "screen.h"
 
 int Screen::width_;

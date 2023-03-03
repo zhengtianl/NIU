@@ -40,8 +40,12 @@ void Camera::SetView(const glm::vec3 &cameraForward,const glm::vec3 &cameraUp) {
     view_mat4_=glm::lookAt(transform->position(), cameraForward, cameraUp);
 }
 
-void Camera::SetProjection(float fovDegrees, float aspectRatio, float nearClip, float farClip) {
+void Camera::SetPerspective(float fovDegrees, float aspectRatio, float nearClip, float farClip) {
     projection_mat4_=glm::perspective(glm::radians(fovDegrees),aspectRatio,nearClip,farClip);
+}
+
+void Camera::SetOrthographic(float left,float right,float bottom,float top,float z_near,float z_far) {
+    projection_mat4_=glm::ortho(left,right,bottom,top,z_near,z_far);
 }
 
 void Camera::Clear() {
@@ -70,7 +74,6 @@ void Camera::Foreach(std::function<void()> func) {
         func();
     }
 }
-
 
 
 

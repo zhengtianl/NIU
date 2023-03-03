@@ -113,7 +113,7 @@ void Application::Update(){
 
     GameObject::Foreach([](GameObject* game_object){
         game_object->ForeachComponent([](Component* component){
-           component->Update();
+            component->Update();
         });
     });
 

@@ -1,4 +1,4 @@
-﻿
+
 #ifndef UNTITLED_MESH_FILTER_H
 #define UNTITLED_MESH_FILTER_H
 

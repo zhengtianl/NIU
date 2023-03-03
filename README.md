@@ -35,4 +35,9 @@
 #### Date: 2/25/2023 - 2/27/2023
 1. [x] import the font depencies
 2. [x] render the font on the screen (picture showed on the below)
-   ![picture](Image/1677485399234.png)
+   ![picture](Image/Font.png)
+
+#### Date: 3/3/2023 Section:GUI
+1. [x] Orthogonal camera matrix implementation
+   ![image](Image/OrthogonalCameraMatrixImplementation.png)
+

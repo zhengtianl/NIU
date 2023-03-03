@@ -8,6 +8,12 @@
 #include <glm/glm.hpp>
 #include "component/component.h"
 
+#include <iostream>
+#include <vector>
+#include <functional>
+#include <glm/glm.hpp>
+#include "component/component.h"
+
 class Camera: public Component {
 public:
     Camera();
@@ -22,11 +28,20 @@ public:
     /// \param aspectRatio  宽高比
     /// \param nearClip 近裁剪面
     /// \param farClip  远裁剪面
-    void SetProjection(float fovDegrees,float aspectRatio,float nearClip,float farClip);
+    void SetPerspective(float fovDegrees, float aspectRatio, float nearClip, float farClip);
 
 
     glm::mat4& view_mat4(){return view_mat4_;}
     glm::mat4& projection_mat4(){return projection_mat4_;}
+
+    /// 设置正交相机矩阵
+    /// \param left
+    /// \param right
+    /// \param bottom
+    /// \param top
+    /// \param z_near
+    /// \param z_far
+    void SetOrthographic(float left,float right,float bottom,float top,float z_near,float z_far);
 
     /// 设置清屏颜色
     /// \param r
@@ -61,6 +76,12 @@ public:
 
     /// 按 depth_ 排序
     static void Sort();
+
+    /// 相机投影类型
+    enum Projection{
+        Perspective,
+        Orthographic
+    };
 private:
 
     glm::mat4 view_mat4_;//指定相机坐标和朝向
@@ -73,9 +94,11 @@ private:
 
     unsigned char culling_mask_;//控制渲染哪些Layer的物体
 
+
     static std::vector<Camera*> all_camera_;//所有Camera，每一帧都遍历Camera，设置current_camera_。
     static Camera* current_camera_;//当前用于渲染的Camera，就是MeshRenderer在计算MVP的时候，用这个Camera的View Projection矩阵计算MVP。
 };
+
 
 
 #endif //UNTITLED_CAMERA_H
