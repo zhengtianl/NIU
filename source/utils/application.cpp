@@ -1,7 +1,4 @@
-﻿//
-// Created by Stark on 2023/2/27.
-//
-
+﻿
 #include "application.h"
 #include <memory>
 #include <glad/gl.h>
@@ -21,6 +18,7 @@
 #include "renderer/mesh_renderer.h"
 #include "control/input.h"
 #include "screen.h"
+#include "render_device/render_device_opengl.h"
 
 
 std::string Application::data_path_;
@@ -73,6 +71,8 @@ static void mouse_scroll_callback(GLFWwindow* window, double x, double y)
 void Application::Init() {
     Debug::Init();
     DEBUG_LOG_INFO("game start");
+    RenderDevice::Init(new RenderDeviceOpenGL());
+
     glfwSetErrorCallback(error_callback);
     if (!glfwInit())
     {
@@ -112,9 +112,11 @@ void Application::Update(){
     UpdateScreenSize();
 
     GameObject::Foreach([](GameObject* game_object){
-        game_object->ForeachComponent([](Component* component){
-            component->Update();
-        });
+        if(game_object->active()){
+            game_object->ForeachComponent([](Component* component){
+                component->Update();
+            });
+        }
     });
 
     Input::Update();
@@ -127,6 +129,9 @@ void Application::Render(){
     //遍历所有相机，每个相机的View Projection，都用来做一次渲染。
     Camera::Foreach([&](){
         GameObject::Foreach([](GameObject* game_object){
+            if(game_object->active()==false){
+                return;
+            }
             auto component=game_object->GetComponent("MeshRenderer");
             if (!component){
                 return;
@@ -158,8 +163,11 @@ void Application::Run() {
 }
 
 void Application::UpdateScreenSize() {
-    int width, height;
-    glfwGetFramebufferSize(glfw_window_, &width, &height);
-    glViewport(0, 0, width, height);
-    Screen::set_width_height(width,height);
+    int view_port_width,view_port_height;
+    glfwGetFramebufferSize(glfw_window_,&view_port_width,&view_port_height);
+    glViewport(0, 0, view_port_width, view_port_height);
+
+    int window_width, window_height;
+    glfwGetWindowSize(glfw_window_, &window_width, &window_height);
+    Screen::set_width_height(window_width, window_height);
 }

@@ -1,7 +1,4 @@
-﻿//
-// Created by StarkLu on 2023/2/27.
-//
-
+﻿
 #ifndef UNTITLED_APPLICATION_H
 #define UNTITLED_APPLICATION_H
 
