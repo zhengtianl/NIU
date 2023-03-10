@@ -45,3 +45,8 @@
 1. [x] [finished the button create](https://github.com/zhengtianl/NIU/blob/9a37984d6f1e89435ec8de32b15ab01d796194a2/source/ui)
    ![image](Image/button1.png)
    ![image](Image/button2.png)
+#### Date: 3/10/2023 audio
+1. [x] background music
+2. [x] physic attack music
+3. [x] magic attack music
+</br>![image](Image/music.png)
